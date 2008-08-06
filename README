@@ -1,4 +1,4 @@
-Log-Log4perl-CommandLine version 0.01
+Log-Log4perl-CommandLine version 0.02
 =====================================
 
 Add some simple command line options via Getopt::Long for basic
