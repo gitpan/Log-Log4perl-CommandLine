@@ -11,7 +11,7 @@ descriptions, and some command line examples with their output.
 
 These always use the C<:easy> mode from L<Log::Log4perl>, since the
 purpose is to illustrate the use of L<Log::Log4perl::CommandLine>, not
-C<Log::Log4perl>.  Go see it for more advanced usage.
+L<Log::Log4perl>.  Go see it for more advanced usage.
 
 =head1 SAMPLE MODULE
 
@@ -28,6 +28,7 @@ interaction with logging from a module:
  
  sub test
  {
+     TRACE "test trace message";
      DEBUG "test debug message";
      INFO  "test info  message";
      WARN  "test warn  message";
@@ -48,8 +49,9 @@ interaction with logging from a module:
 C<sample1.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine;
+ use Log::Log4perl::CommandLine qw(:all);
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -58,8 +60,8 @@ C<sample1.pl>:
  
 
 
-By default, C<use Log::Log4perl::CommandLine;> with no options will
-print only messages with ERROR or FATAL, other messages are
+Use the C<:all> option to enable all the standard options.  By default
+it will print only messages with ERROR or FATAL, other messages are
 suppressed.  The various command line options affect the output as
 shown.
 
@@ -111,6 +113,15 @@ Sample Runs:
  [ERROR] error message
  [FATAL] fatal message
  
+ % perl sample1.pl --trace
+ [TRACE] trace message
+ [DEBUG] debug message
+ [INFO ] info  message
+ [WARN ] warn  message
+ [ERROR] error message
+ [FATAL] fatal message
+ 
+ 
 
 
 =item sample2
@@ -118,12 +129,13 @@ Sample Runs:
 C<sample2.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine;
+ use Log::Log4perl::CommandLine qw(:all);
  
  use SampleModule;
  
  SampleModule::test();
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -132,8 +144,7 @@ C<sample2.pl>:
  
 
 
-This script still uses the defaults, but also illustrates the
-interaction with modules.
+This script illustrates the interaction with modules.
 
 Sample Runs:
  
@@ -143,11 +154,9 @@ Sample Runs:
  [ERROR] error message
  [FATAL] fatal message
  
- % perl sample2.pl  -q
+ % perl sample2.pl -q
  
- % perl sample2.pl  -v
- [INFO ] test info  message
- [WARN ] test warn  message
+ % perl sample2.pl -v
  [ERROR] test error message
  [FATAL] test fatal message
  [INFO ] info  message
@@ -155,24 +164,24 @@ Sample Runs:
  [ERROR] error message
  [FATAL] fatal message
  
- % perl sample2.pl  -q SampleModule
+ % perl sample2.pl -q SampleModule
  [ERROR] error message
  [FATAL] fatal message
  
- % perl sample2.pl  -q -v SampleModule
+ % perl sample2.pl -q -v SampleModule
  [INFO ] test info  message
  [WARN ] test warn  message
  [ERROR] test error message
  [FATAL] test fatal message
  
- % perl sample2.pl  -q -d SampleModule
+ % perl sample2.pl -q -d SampleModule
  [DEBUG] test debug message
  [INFO ] test info  message
  [WARN ] test warn  message
  [ERROR] test error message
  [FATAL] test fatal message
  
- % perl sample2.pl  -v -d SampleModule
+ % perl sample2.pl -v -d SampleModule
  [DEBUG] test debug message
  [INFO ] test info  message
  [WARN ] test warn  message
@@ -190,8 +199,10 @@ Sample Runs:
 C<sample3.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine { level => $INFO };
+ use Log::Log4perl::CommandLine ':all',
+                                ':loginit' => { level => $INFO };
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -225,8 +236,10 @@ Sample Runs:
 C<sample4.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine { layout => '%d %c %m%n' };
+ use Log::Log4perl::CommandLine ':all',
+                                ':loginit' => { layout => '%c %m%n' };
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -241,16 +254,16 @@ layouts, see L<Log::Log4perl::Layout::PatternLayout>.
 Sample Runs:
  
  % perl sample4.pl
- 2008/08/06 09:33:51 main error message
- 2008/08/06 09:33:51 main fatal message
+ main error message
+ main fatal message
  
  % perl sample4.pl -q
  
  % perl sample4.pl -v
- 2008/08/06 09:34:00 main info  message
- 2008/08/06 09:34:00 main warn  message
- 2008/08/06 09:34:00 main error message
- 2008/08/06 09:34:00 main fatal message
+ main info  message
+ main warn  message
+ main error message
+ main fatal message
  
 
 
@@ -259,8 +272,9 @@ Sample Runs:
 C<sample5.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine qw(log4perl.conf);
+ use Log::Log4perl::CommandLine qw(:all :logconfig log4perl.conf);
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -278,7 +292,7 @@ Here is a sample configuration file:
  log4perl.logger = WARN,  screen
  log4perl.appender.screen=Log::Log4perl::Appender::Screen
  log4perl.appender.screen.layout=Log::Log4perl::Layout::PatternLayout
- log4perl.appender.screen.layout.ConversionPattern=%d %c %m%n
+ log4perl.appender.screen.layout.ConversionPattern=%c %m%n
  
 
 
@@ -291,22 +305,17 @@ L<Log::Log4perl>.
 Sample Runs:
  
  % perl sample5.pl 
- [WARN ] main warn  message
- [ERROR] main error message
- [FATAL] main fatal message
- 
- % perl sample5.pl 
- 2008/08/06 09:41:47 main warn  message
- 2008/08/06 09:41:47 main error message
- 2008/08/06 09:41:47 main fatal message
+ main warn  message
+ main error message
+ main fatal message
  
  % perl sample5.pl -q
  
  % perl sample5.pl -v
- 2008/08/06 09:42:01 main info  message
- 2008/08/06 09:42:01 main warn  message
- 2008/08/06 09:42:01 main error message
- 2008/08/06 09:42:01 main fatal message
+ main info  message
+ main warn  message
+ main error message
+ main fatal message
  
 
 
@@ -315,14 +324,15 @@ Sample Runs:
 C<sample6.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine \q(
+ use Log::Log4perl::CommandLine ':all',
+ ':loginit' => q(
      log4perl.logger = WARN,  screen
      log4perl.appender.screen=Log::Log4perl::Appender::Screen
      log4perl.appender.screen.layout=Log::Log4perl::Layout::PatternLayout
      log4perl.appender.screen.layout.ConversionPattern=[%-5p] %c %m%n
  );
  
- 
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -332,7 +342,7 @@ C<sample6.pl>:
 
 
 You can also specify a string with a fancy log4perl configuration
-inline.  NOTE!!!!  This is a REFERENCE to a string.
+inline.
 
 Sample Runs:
  
@@ -354,7 +364,8 @@ Sample Runs:
 C<sample7.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine \q(
+ use Log::Log4perl::CommandLine ':all',
+ ':loginit' => q(
      log4perl.logger = WARN,  screen
      log4perl.appender.screen=Log::Log4perl::Appender::Screen
      log4perl.appender.screen.layout=Log::Log4perl::Layout::PatternLayout
@@ -365,6 +376,7 @@ C<sample7.pl>:
  
  SampleModule::test();
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -394,7 +406,6 @@ Sample Runs:
  % perl sample7.pl -q
  
  % perl sample7.pl -v
- [INFO ] SampleModule test info  message
  [WARN ] SampleModule test warn  message
  [ERROR] SampleModule test error message
  [FATAL] SampleModule test fatal message
@@ -423,7 +434,8 @@ Sample Runs:
 C<sample8.pl>:
  
  use Log::Log4perl qw(:easy);
- use Log::Log4perl::CommandLine { layout => '[%-5p] %c %m%n' };
+ use Log::Log4perl::CommandLine ':all',
+                                ':loginit' => { layout => '[%-5p] %c %m%n' };
  
  use SampleModule;
  use SampleModule2;
@@ -431,6 +443,7 @@ C<sample8.pl>:
  SampleModule::test();
  SampleModule2::test();
  
+ TRACE "trace message";
  DEBUG "debug message";
  INFO  "info  message";
  WARN  "warn  message";
@@ -472,6 +485,14 @@ Sample Runs:
  [ERROR] main error message
  [FATAL] main fatal message
  
+ % perl sample8.pl -q -d SampleModule
+ [DEBUG] SampleModule test debug message
+ [INFO ] SampleModule test info  message
+ [WARN ] SampleModule test warn  message
+ [ERROR] SampleModule test error message
+ [FATAL] SampleModule test fatal message
+ 
+ 
 
 
 =item sample9
@@ -492,19 +513,17 @@ Sample Runs:
  [ERROR] error message
  [FATAL] fatal message
  
- % cat mylog.output
- 2008/08/06 10:06:46 main error message
- 2008/08/06 10:06:46 main fatal message
+ % cat mylog.output && rm mylog.output
+ 2008/08/06 13:37:24 main error message
+ 2008/08/06 13:37:24 main fatal message
  
- % rm mylog.output
- 
- % perl sample9.pl --logfile "mylog.output|%r %m%n"
+ % perl sample9.pl --logfile 'mylog.output|%d %m%n'
  [ERROR] error message
  [FATAL] fatal message
  
- % cat mylog.output
- 48 error message
- 48 fatal message
+ % cat mylog.output && rm mylog.output
+ 2008/08/06 13:41:50 error message
+ 2008/08/06 13:41:50 fatal message
  
 
 
@@ -523,9 +542,9 @@ Sample Runs:
  [FATAL] fatal message
  
  % perl sample10.pl --logconfig log4perl.conf
- 2008/08/06 10:14:34 main warn  message
- 2008/08/06 10:14:34 main error message
- 2008/08/06 10:14:34 main fatal message
+ main warn  message
+ main error message
+ main fatal message
  
 
 

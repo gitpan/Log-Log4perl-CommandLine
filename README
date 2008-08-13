@@ -1,8 +1,21 @@
-Log-Log4perl-CommandLine version 0.02
-=====================================
+Log-Log4perl-CommandLine
+========================
 
-Add some simple command line options via Getopt::Long for basic
-configuration of Log::Log4perl enabled applications and modules.
+Add command line options via Getopt::Long for basic configuration of
+Log::Log4perl enabled applications and modules.
+
+ my_program.pl --verbose
+ my_program.pl -v
+ my_program.pl --debug
+ my_program.pl -d
+ my_program.pl --quiet
+ my_program.pl -q
+
+also configure per module (category):
+
+ my_program.pl --debug MyModule
+
+etc.
 
 INSTALLATION
 

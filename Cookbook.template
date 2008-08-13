@@ -11,7 +11,7 @@ descriptions, and some command line examples with their output.
 
 These always use the C<:easy> mode from L<Log::Log4perl>, since the
 purpose is to illustrate the use of L<Log::Log4perl::CommandLine>, not
-C<Log::Log4perl>.  Go see it for more advanced usage.
+L<Log::Log4perl>.  Go see it for more advanced usage.
 
 =head1 SAMPLE MODULE
 
@@ -36,8 +36,8 @@ C<sample1.pl>:
 [% INSERT eg/sample1.pl %]
 [% END %]
 
-By default, C<use Log::Log4perl::CommandLine;> with no options will
-print only messages with ERROR or FATAL, other messages are
+Use the C<:all> option to enable all the standard options.  By default
+it will print only messages with ERROR or FATAL, other messages are
 suppressed.  The various command line options affect the output as
 shown.
 
@@ -53,8 +53,7 @@ C<sample2.pl>:
 [% INSERT eg/sample2.pl %]
 [% END %]
 
-This script still uses the defaults, but also illustrates the
-interaction with modules.
+This script illustrates the interaction with modules.
 
 Sample Runs:
 [% FILTER indent(1) %]
@@ -126,7 +125,7 @@ C<sample6.pl>:
 [% END %]
 
 You can also specify a string with a fancy log4perl configuration
-inline.  NOTE!!!!  This is a REFERENCE to a string.
+inline.
 
 Sample Runs:
 [% FILTER indent(1) %]
