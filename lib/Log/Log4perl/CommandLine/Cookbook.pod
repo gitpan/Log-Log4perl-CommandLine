@@ -548,6 +548,74 @@ Sample Runs:
  
 
 
+=item sample11
+
+C<sample11.pl>:
+ 
+ use Log::Log4perl qw(:easy);
+ use Log::Log4perl::CommandLine qw(:all :noinit handlelogoptions);
+ 
+ Log::Log4perl->easy_init($FATAL);
+ 
+ handlelogoptions();
+ 
+ TRACE "trace message";
+ DEBUG "debug message";
+ INFO  "info  message";
+ WARN  "warn  message";
+ ERROR "error message";
+ FATAL "fatal message";
+ 
+ Log::Log4perl::init('log4perl.conf');
+ 
+ handlelogoptions();
+ 
+ TRACE "trace message 2";
+ DEBUG "debug message 2";
+ INFO  "info  message 2";
+ WARN  "warn  message 2";
+ ERROR "error message 2";
+ FATAL "fatal message 2";
+ 
+
+
+This script shows how to use C<:noinit> to disable auto log
+configuration and explicitly call handlelogoptions() after manually
+configuring Log4perl.
+
+Sample Runs:
+ 
+ % perl sample11.pl
+ 2008/08/13 22:33:50 fatal message
+ main warn  message 2
+ main error message 2
+ main fatal message 2
+ 
+ % perl sample11.pl -v
+ 2008/08/13 22:33:52 info  message
+ 2008/08/13 22:33:52 warn  message
+ 2008/08/13 22:33:52 error message
+ 2008/08/13 22:33:52 fatal message
+ main info  message 2
+ main warn  message 2
+ main error message 2
+ main fatal message 2
+ 
+ % perl sample11.pl -d
+ 2008/08/13 22:33:55 debug message
+ 2008/08/13 22:33:55 info  message
+ 2008/08/13 22:33:55 warn  message
+ 2008/08/13 22:33:55 error message
+ 2008/08/13 22:33:55 fatal message
+ main debug message 2
+ main info  message 2
+ main warn  message 2
+ main error message 2
+ main fatal message 2
+ 
+ 
+
+
 =back
 
 =head1 AUTHOR

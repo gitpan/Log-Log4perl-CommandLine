@@ -193,6 +193,22 @@ Sample Runs:
 [% INSERT eg/sample10.output %]
 [% END %]
 
+=item sample11
+
+C<sample11.pl>:
+[% FILTER indent(1) %]
+[% INSERT eg/sample11.pl %]
+[% END %]
+
+This script shows how to use C<:noinit> to disable auto log
+configuration and explicitly call handlelogoptions() after manually
+configuring Log4perl.
+
+Sample Runs:
+[% FILTER indent(1) %]
+[% INSERT eg/sample11.output %]
+[% END %]
+
 =back
 
 =head1 AUTHOR
