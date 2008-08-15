@@ -157,6 +157,8 @@ Sample Runs:
  % perl sample2.pl -q
  
  % perl sample2.pl -v
+ [INFO ] test info  message
+ [WARN ] test warn  message
  [ERROR] test error message
  [FATAL] test fatal message
  [INFO ] info  message
@@ -406,6 +408,7 @@ Sample Runs:
  % perl sample7.pl -q
  
  % perl sample7.pl -v
+ [INFO ] SampleModule test info  message
  [WARN ] SampleModule test warn  message
  [ERROR] SampleModule test error message
  [FATAL] SampleModule test fatal message
