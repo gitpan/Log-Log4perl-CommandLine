@@ -1,5 +1,8 @@
 Revision history for Perl extension Log::Log4perl::CommandLine.
 
+0.06  Wed Jul 29 13:08:48 EDT 2009
+      - Changed call to perl in test to use "$^X -I../blib/lib"
+
 0.05  Fri Aug 15 19:22:45 EDT 2008
       - Fixed failing tests where the right perl isn't in PATH
       - Changed default category for verbose (info) to root instead
